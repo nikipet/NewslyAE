@@ -1,0 +1,138 @@
+﻿@model NewslyAE.Models.DTOs.TopArticlesWrapper;
+
+@{
+    ViewData["Title"] = "Search Results";
+}
+
+<h1>Search Results</h1>
+
+<p>
+    <a asp-action="Index"> Create New Search</a>
+</p>
+@{ var resultsShown = Model.Request.Page * Model.Request.PageSize;}
+@if (resultsShown >= Model.Result.TotalResults)
+{
+    <h6> Showing: @Model.Result.TotalResults Articles from @Model.Result.TotalResults total results</h6>
+}
+@if (resultsShown < Model.Result.TotalResults)
+{
+    <h6> Showing: @resultsShown Articles from @Model.Result.TotalResults total results</h6>
+}
+@using (Html.BeginForm("ExportTopArticlesToExcel", "Download", FormMethod.Post))
+{
+
+    @for (int i = 0; i < Model.Result.Articles.Count; i++)
+    {
+
+        <input type="hidden" asp-for="Result.Articles[i].Author" value="@Model.Result.Articles[i].Author" />
+        ;
+        <input type="hidden" asp-for="Result.Articles[i].Source.Id" value="@Model.Result.Articles[i].Source.Id" />
+        ;
+        <input type="hidden" asp-for="Result.Articles[i].Source.Name" value="@Model.Result.Articles[i].Source.Name" />
+        ;
+        <input type="hidden" asp-for="Result.Articles[i].Title" value="@Model.Result.Articles[i].Title" />
+        ;
+        <input type="hidden" asp-for="Result.Articles[i].Description" value="@Model.Result.Articles[i].Description" />
+        ;
+        <input type="hidden" asp-for="Result.Articles[i].Url" value="@Model.Result.Articles[i].Url" />
+        ;
+        <input type="hidden" asp-for="Result.Articles[i].PublishedAt" value="@Model.Result.Articles[i].PublishedAt" />
+        ;
+
+    }
+    <input type="submit" value="Download" class="btn-dark" style="margin-bottom: 20px;" />
+}
+<table class="table">
+    <thead>
+        <tr class="d-flex">
+            <th class="col-2">
+
+            </th>
+            <th class="col-2">
+                Title
+            </th>
+            <th class="col-4">
+                Description
+            </th>
+            <th class="col-1">
+                Full Article
+            </th>
+            <th class="col-1">
+                Source
+            </th>
+            <th class="col-1">
+                Source ID
+            </th>
+            <th class="col-1">
+                Author
+            </th>
+            <th class="col-1">
+                Published At
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Result.Articles)
+        {
+            <tr class="d-flex">
+                <td class="col-2">
+                    <img src="@item.UrlToImage" alt="picture" style="width:125px;height:100px;" />
+                </td>
+                <td class="col-2">
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td class="col-4">
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td class="col-1">
+                    <a href="@item.Url">Link</a>
+                </td>
+                <td class="col-1">
+                    @Html.DisplayFor(modelItem => item.Source.Name)
+                </td>
+                <td class="col-1">
+                    @Html.DisplayFor(modelItem => item.Source.Id)
+                </td>
+                <td class="col-1">
+                    @Html.DisplayFor(modelItem => item.Author)
+                </td>
+                <td class="col-1">
+                    @Html.DisplayFor(modelItem => item.PublishedAt)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="navbar">
+    
+    <form asp-action="Search">
+        <input type="hidden" asp-for="Request.Country" value="@Model.Request.Country" class="form-control" />
+        <input type="hidden" asp-for="Request.Category" value="@Model.Request.Category" />
+        <input type="hidden" asp-for="Request.Sources" value="@Model.Request.Sources" />
+        <input type="hidden" asp-for="Request.Keywords" value="@Model.Request.Keywords" class="form-control" />
+        <input type="hidden" asp-for="Request.PageSize" value="@Model.Request.PageSize" class="form-control" />
+        @{ int previousPage = Model.Request.Page - 1;}
+        <input type="hidden" asp-for="Request.Page" value="@previousPage" class="form-control" />
+        @if (Model.Request.Page >= 2)
+        {
+            <input type="submit" value="Previous Page" class="btn btn-primary" />
+        }
+        </form>
+    <form asp-action="Search">
+        <input type="hidden" asp-for="Request.Country" value="@Model.Request.Country" class="form-control" />
+        <input type="hidden" asp-for="Request.Category" value="@Model.Request.Category" />
+        <input type="hidden" asp-for="Request.Sources" value="@Model.Request.Sources" />
+        <input type="hidden" asp-for="Request.Keywords" value="@Model.Request.Keywords" class="form-control" />
+        <input type="hidden" asp-for="Request.PageSize" value="@Model.Request.PageSize" class="form-control" />
+        @{ int nextPage = Model.Request.Page + 1;}
+        <input type="hidden" asp-for="Request.Page" value="@nextPage" class="form-control" />
+        @if (!(nextPage * Model.Request.PageSize > Model.Result.TotalResults+ Model.Request.PageSize))
+        {
+            <input type="submit" value="Next Page" class="btn btn-primary" />
+        }
+        </form>
+
+</div>
+
+

@@ -1,0 +1,75 @@
+﻿@model NewslyAE.Models.DTOs.TopArticlesWrapper;
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome to NewslyAE</h1>
+    <p>NewslyАЕ is a Web Application that allows users to search articles worldwide!</p>
+    <p>You can search only top articles or you can freely exlore articles.</p>
+    <br>
+    <br>
+    <h5>Example for result from search by Keywords:"@ViewBag.Keywords" </h5>
+</div>
+
+<table class="table">
+    <thead>
+        <tr class="d-flex">
+            <th class="col-2">
+
+            </th>
+            <th class="col-2">
+                Title
+            </th>
+            <th class="col-4">
+                Description
+            </th>
+            <th class="col-1">
+                Full Article
+            </th>
+            <th class="col-1">
+                Source
+            </th>
+            <th class="col-1">
+                Source ID
+            </th>
+            <th class="col-1">
+                Author
+            </th>
+            <th class="col-1">
+                Published At
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Result.Articles)
+        {
+            <tr class="d-flex">
+                <td class="col-2">
+                    <img src="@item.UrlToImage" alt="picture" style="width:125px;height:100px;" />
+                </td>
+                <td class="col-2">
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td class="col-4">
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td class="col-1">
+                    <a href="@item.Url">Link</a>
+                </td>
+                <td class="col-1">
+                    @Html.DisplayFor(modelItem => item.Source.Name)
+                </td>
+                <td class="col-1">
+                    @Html.DisplayFor(modelItem => item.Source.Id)
+                </td>
+                <td class="col-1">
+                    @Html.DisplayFor(modelItem => item.Author)
+                </td>
+                <td class="col-1">
+                    @Html.DisplayFor(modelItem => item.PublishedAt)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

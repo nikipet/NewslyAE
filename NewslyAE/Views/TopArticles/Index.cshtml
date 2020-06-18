@@ -1,0 +1,80 @@
+﻿@model NewslyAE.Models.DTOs.TopArticlesWrapper;
+
+@{
+    ViewData["Title"] = "Search";
+}
+
+<h1>Search only the Top Articles </h1>
+
+<h5>Please fill the form below to search the Top Articles from around the globe</h5>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form name="searchProperties" asp-action="Search" onsubmit="conflict(this);topArticlesInputNeeded(this)">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group-key">
+                <label asp-for="Request.Keywords"></label>
+                <input asp-for="Request.Keywords" class="form-control" />
+                <span asp-validation-for="Request.Keywords" class="text-danger"></span>
+            </div>
+            <div class="form-group-source">
+                <label asp-for="Request.Sources" class="control-label"> Sources</label>
+                <input asp-for="Request.Sources" class="form-control" />
+                <span asp-validation-for="Request.Sources" class="text-danger"></span>
+                <p class="mask-source">
+                    A comma-seperated string of identifiers for the news sources or blogs you want headlines from.
+                    <br />
+                    <b style="color:red">you can't mix this param with the Country or Category search parameters.</b>
+                </p>
+            </div>
+            <div class="form-group-country">
+                <label asp-for="Request.Country" class="control-label"></label>
+                <input asp-for="Request.Country" class="form-control" />
+                <span asp-validation-for="Request.Country" class="text-danger"></span>
+                <p class="mask-country">
+                    The 2-letter code of the country you want to get headlines for
+                    <br>
+                    <b style="color:red">Cannot be mixed with the Sources search parameters</b>
+                </p>
+            </div>
+            <div class="form-group-category">
+                <label asp-for="Request.Category" class="control-label"></label>
+                <select asp-for="Request.Category" class="form-control">
+                    <option value="" selected></option>
+                    <option value="Business">Business</option>
+                    <option value="Entertainment">Entertainment</option>
+                    <option value="Health">Health</option>
+                    <option value="Science">Science</option>
+                    <option value="Sports">Sports</option>
+                    <option value="Technology">Technology</option>
+                </select>
+                <span asp-validation-for="Request.Category" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label"> Articles per Page</label>
+                <input asp-for="Request.PageSize" value="20" class="form-control" min="1" max="100" />
+                <span asp-validation-for="Request.PageSize" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Request.Page" class="control-label"></label>
+                <input asp-for="Request.Page" value="1" class="form-control" min="1" />
+                <span asp-validation-for="Request.Page" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Search" class="btn btn-primary"
+                       onclick="return conflict() && topArticlesInputNeeded()" />
+            </div>
+        </form>
+    </div>
+    <div class="col-md-8">
+        <img src="https://images.unsplash.com/photo-1530669731069-48706bc794ab?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1000&q=80"
+             alt="Articles" style="display:block;height: 500px;width: 400px;margin-left: auto;margin-right: auto;"/>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script src="~\js\site.js"></script>
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
