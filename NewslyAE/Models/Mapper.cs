@@ -25,6 +25,7 @@ namespace NewslyAE.Models
             if (!(requestParamsDTO.Sources is null)) {
                 requestParam.Sources = requestParamsDTO.Sources.Split(",").ToList();
             }
+
             if (!(requestParamsDTO.Category is null))
             {
                 ///If the user doesnt select one of the options,
@@ -38,6 +39,18 @@ namespace NewslyAE.Models
                 } else {
                     throw new TopArticlesReguestInputException(string.Format(
                         NO_SUCH_CATEGORY, requestParamsDTO.Category));
+                }
+            }
+            if (!(requestParamsDTO.Language is null))
+            {
+                if (Enum.TryParse(requestParamsDTO.Language.ToUpper(), out Languages language))
+                {
+                    requestParam.Language = language;
+                }
+                else
+                {
+                    throw new EverythingRequestInputException(string.Format(
+                       NO_SUCH_LANGUAGE_CODE, requestParamsDTO.Language));
                 }
             }
             if (!(requestParamsDTO.Country is null))
