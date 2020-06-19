@@ -12,6 +12,8 @@ namespace NewslyAE.Models.DTOs
         [StringLength(2)]
         public string Country { get; set; }
         public string Category { get; set; }
+        [StringLength(2)]
+        public string Language { get; set; }
         public string Sources { get; set; }
         public string Keywords { get; set; }
         [Range(1, 100, ErrorMessage = "Page size must be between 1 and 100")]
